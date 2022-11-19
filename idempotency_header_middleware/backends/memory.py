@@ -33,6 +33,7 @@ class MemoryBackend(Backend):
 
         if (expiry := self.response_store[idempotency_key]['expiry']) and expiry <= time.time():
             del self.response_store[idempotency_key]
+            await self.clear_idempotency_key(idempotency_key)
             return None
 
         return JSONResponse(
